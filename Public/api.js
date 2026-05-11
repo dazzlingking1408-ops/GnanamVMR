@@ -5,7 +5,7 @@
 
 const VMR_API = (() => {
 
-  const BASE = 'http://localhost:5000/api';
+const BASE = 'https://gnanamvmr.onrender.com/api';
 
   /* ── Token helpers ── */
   const getToken  = ()        => localStorage.getItem('vmr_token');
