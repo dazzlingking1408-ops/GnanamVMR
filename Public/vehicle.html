@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VMR — Vehicle Records</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">VMR</div>
+      <div class="sidebar-logo-text"><h1>VMR</h1><p>Vehicle Maintenance Record</p></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Menu</div>
+      <a href="homepage.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Dashboard
+      </a>
+      <a href="venue.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v9a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Venue
+      </a>
+      <a href="fz.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><path d="M15 6H12L9 17"/><path d="m18 10-5-4-3 4"/></svg>FZ
+      </a>
+      <!-- Custom vehicle nav items (active one highlighted) -->
+      <div id="custom-nav-items"></div>
+      <div class="nav-divider"></div>
+      <div class="nav-section-label">Settings</div>
+      <a href="changepassword.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Change Password
+      </a>
+      <div class="nav-divider"></div>
+      <a href="#" class="nav-item" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout
+      </a>
+    </nav>
+    <!-- Vehicle selector in sidebar -->
+    <div class="sidebar-vehicles" id="sidebar-vehicles-section">
+    
+      <div id="sidebar-custom-thumbs"></div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <p>Keep your vehicle<br/>in perfect condition</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="toggleSidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <h2 class="topbar-title"><span class="accent" id="page-title-vehicle">Vehicle</span> — Maintenance Records</h2>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-danger btn-sm" id="deleteVehicleBtn" style="margin-right:8px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Delete Vehicle
+        </button>
+        <button class="btn btn-primary" id="addEntryBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Entry
+        </button>
+        <button class="btn btn-secondary" id="exportBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Vehicle info card -->
+      <div class="vehicle-info-card slide-up" id="vehicle-info-card" style="
+        display:flex; align-items:center; gap:16px;
+        background:var(--card); border:1px solid var(--border2);
+        border-radius:12px; padding:16px 20px; margin-bottom:20px;
+      ">
+        <div style="font-size:36px" id="vc-emoji">🚗</div>
+        <div>
+          <div style="font-size:18px;font-weight:700;color:var(--text1)" id="vc-name">—</div>
+          <div style="font-size:13px;color:var(--text3)" id="vc-meta">—</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid slide-up">
+        <div class="stat-card"><div class="stat-label">Total Records</div><div class="stat-value" id="st-count">0</div><div class="stat-sub">Service entries</div></div>
+        <div class="stat-card"><div class="stat-label">Total Fuel Cost</div><div class="stat-value" id="st-fuel">₹0</div><div class="stat-sub">Cumulative</div></div>
+        <div class="stat-card"><div class="stat-label">Parts & Items</div><div class="stat-value" id="st-parts">₹0</div><div class="stat-sub">Repairs & replacements</div></div>
+        <div class="stat-card"><div class="stat-label">Current ODO</div><div class="stat-value" id="st-odo">0 km</div><div class="stat-sub">Last recorded</div></div>
+      </div>
+
+      <div class="section-title slide-up delay-1">All Records</div>
+      <div class="table-wrap slide-up delay-2">
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>S.No</th><th>Vehicle</th><th>Date</th><th>ODO (km)</th>
+                <th>Rate / L</th><th>Total Price</th><th>Cumulative</th>
+                <th>Box Type</th><th>Items Repaired</th><th>Cost of Items</th>
+                <th>Total Amount</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="recordsBody">
+              <tr><td colspan="12"><div class="empty-state">
+                <p>No records yet. Click "Add Entry" to get started.</p>
+              </div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <footer class="page-footer">© 2024 VMR - Vehicle Maintenance Record. All rights reserved.</footer>
+  </div>
+</div>
+
+<!-- ADD ENTRY MODAL -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Add Entry — <span id="modal-vehicle-name">Vehicle</span></h2>
+      <button class="modal-close" id="modalClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Date *</label>
+          <input class="form-input" id="f-date" type="date"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ODO Reading (km) *</label>
+          <input class="form-input" id="f-odo" type="number" min="0" placeholder="e.g. 18500"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rate per Litre (₹) *</label>
+          <input class="form-input" id="f-rate" type="number" step="0.01" min="0" placeholder="e.g. 109.50"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fuel Total Price (₹) *</label>
+          <input class="form-input" id="f-total" type="number" step="0.01" min="0" placeholder="e.g. 2500.00"/>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Maintenance Box Type</label>
+          <select class="form-input" id="f-box">
+            <option value="Service">Service</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Repair">Repair</option>
+            <option value="Inspection">Inspection</option>
+          </select>
+        </div>
+      </div>
+      <div class="items-header">
+        <span class="items-title">Items Repaired / Replaced</span>
+        <span class="text-hint text-xs" id="itemCount">1 item</span>
+      </div>
+      <div id="itemsContainer"></div>
+      <button class="add-item-btn" id="addItemBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Another Item
+      </button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSave">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+        Save Record
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="api.js"></script>
+<script>
+  VMR_API.requireAuth();
+
+  // ── Read vehicle from URL ────────────────────────────────────────────────────
+  const params  = new URLSearchParams(window.location.search);
+  const VEH_ID  = params.get('id');
+  const EMOJI_MAP = { car:'🚗', bike:'🏍️', scooter:'🛵', truck:'🚛', other:'🚙' };
+
+  function getCustomVehicles() {
+    try { return JSON.parse(localStorage.getItem('vmr_custom_vehicles') || '[]'); } catch { return []; }
+  }
+  function saveCustomVehicles(list) {
+    localStorage.setItem('vmr_custom_vehicles', JSON.stringify(list));
+  }
+
+  // Find this vehicle
+  const vehicles = getCustomVehicles();
+  const vehicle  = vehicles.find(v => v.id === VEH_ID);
+
+  if (!vehicle) {
+    // Not found — redirect home
+    window.location.href = 'homepage.html';
+  }
+
+  // ── Set page title & info ────────────────────────────────────────────────────
+  document.title = `VMR — ${vehicle.name}`;
+  document.getElementById('page-title-vehicle').textContent = vehicle.name;
+  document.getElementById('modal-vehicle-name').textContent = vehicle.name;
+  document.getElementById('vc-emoji').textContent = EMOJI_MAP[vehicle.type] || '🚙';
+  document.getElementById('vc-name').textContent  = vehicle.name;
+  document.getElementById('vc-meta').textContent  =
+    `${vehicle.model}${vehicle.year ? ' · ' + vehicle.year : ''} · ${vehicle.type.charAt(0).toUpperCase()+vehicle.type.slice(1)}`;
+
+  // ── Render sidebar custom nav items ─────────────────────────────────────────
+  const navContainer = document.getElementById('custom-nav-items');
+  navContainer.innerHTML = vehicles.map(v => `
+    <a href="vehicle.html?id=${v.id}" class="nav-item${v.id === VEH_ID ? ' active' : ''}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/>
+        <path d="M15 6H12L9 17"/><path d="m18 10-5-4-3 4"/>
+      </svg>${v.name}
+    </a>`).join('');
+
+  // Sidebar vehicle thumbs
+  const thumbsContainer = document.getElementById('sidebar-custom-thumbs');
+  thumbsContainer.innerHTML = vehicles.map(v => `
+    <a href="vehicle.html?id=${v.id}" class="vehicle-thumb${v.id === VEH_ID ? ' active' : ''}">
+      <div class="vehicle-thumb-emoji">${EMOJI_MAP[v.type]||'🚙'}</div>
+      <div class="vehicle-thumb-name">${v.name.toUpperCase()}</div>
+    </a>`).join('');
+
+  // ── Data storage (localStorage per vehicle) ──────────────────────────────────
+  const STORE_KEY = `vmr_records_${VEH_ID}`;
+
+  function getRecords() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch { return []; }
+  }
+  function setRecords(recs) {
+    localStorage.setItem(STORE_KEY, JSON.stringify(recs));
+  }
+
+  let allRecords = [];
+  let modalItems = [{ name:'', cost:'' }];
+
+  document.getElementById('toggleSidebar').addEventListener('click', () =>
+    document.getElementById('sidebar').classList.toggle('collapsed'));
+  document.getElementById('logoutBtn').addEventListener('click', e => { e.preventDefault(); VMR_API.logout(); });
+
+  function fmt(n)      { return Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function fmtN(n)     { return Number(n).toLocaleString('en-IN'); }
+  function totalAmt(r) { return r.items.reduce((s,i) => s+i.cost, 0) + r.totalPrice; }
+  function badgeCls(t) { return ({Service:'service',Maintenance:'maintenance',Repair:'repair',Inspection:'inspection'})[t]||'service'; }
+
+  let toastTimer;
+  function showToast(msg, type='success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast toast-' + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.add('hidden'), 3500);
+  }
+
+  // ── Render table ─────────────────────────────────────────────────────────────
+  function renderTable(recs) {
+    allRecords = recs;
+    const tbody = document.getElementById('recordsBody');
+
+    const fuel  = recs.reduce((s,r) => s+r.totalPrice, 0);
+    const parts = recs.reduce((s,r) => s+r.items.reduce((a,i)=>a+i.cost,0), 0);
+    const last  = recs[recs.length-1];
+    document.getElementById('st-count').textContent = recs.length;
+    document.getElementById('st-fuel').textContent  = '₹' + fmtN(Math.round(fuel));
+    document.getElementById('st-parts').textContent = '₹' + fmtN(Math.round(parts));
+    document.getElementById('st-odo').textContent   = last ? fmtN(last.odo)+' km' : '0 km';
+
+    if (!recs.length) {
+      tbody.innerHTML = `<tr><td colspan="12"><div class="empty-state">
+        <p>No records yet. Click "Add Entry" to get started.</p></div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = recs.map(r => `
+      <tr>
+        <td class="muted">${r.sNo}</td>
+        <td>${vehicle.name}</td>
+        <td>${r.date}</td>
+        <td>${fmtN(r.odo)}</td>
+        <td>₹${fmt(r.ratePerL)}</td>
+        <td>₹${fmt(r.totalPrice)}</td>
+        <td>₹${fmt(r.cumPrice)}</td>
+        <td><span class="badge badge-${badgeCls(r.boxType)}">${r.boxType}</span></td>
+        <td class="truncate" title="${r.items.map(x=>x.name).join(', ')}">${r.items.map(x=>x.name).join(', ')}</td>
+        <td class="truncate" title="${r.items.map(x=>'₹'+x.cost).join(', ')}">${r.items.map(x=>'₹'+fmt(x.cost)).join(', ')}</td>
+        <td class="amount">₹${fmt(totalAmt(r))}</td>
+        <td>
+          <button class="btn btn-danger btn-sm del-btn" data-id="${r.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            Del
+          </button>
+        </td>
+      </tr>`).join('');
+
+    document.querySelectorAll('.del-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Delete this record?')) return;
+        const recs = getRecords().filter(r => r.id !== btn.dataset.id);
+        // Recalculate cumulative
+        let cum = 0;
+        recs.forEach((r, i) => { cum += r.totalPrice; r.cumPrice = cum; r.sNo = i+1; });
+        setRecords(recs);
+        renderTable(recs);
+        showToast('Record deleted.');
+      });
+    });
+  }
+
+  // ── Modal items ──────────────────────────────────────────────────────────────
+  function renderItems() {
+    const c = document.getElementById('itemsContainer');
+    document.getElementById('itemCount').textContent = modalItems.length + ' item' + (modalItems.length>1?'s':'');
+    c.innerHTML = modalItems.map((item, idx) => `
+      <div class="item-row">
+        <div class="item-row-head">
+          <span class="item-row-label">ITEM ${idx+1}</span>
+          ${modalItems.length>1 ? `<button type="button" class="btn btn-danger btn-sm rm-item" data-idx="${idx}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg> Remove</button>` : ''}
+        </div>
+        <div class="item-row-grid">
+          <div class="form-group">
+            <label class="form-label">Item Name</label>
+            <input class="form-input item-name" data-idx="${idx}" placeholder="e.g. Engine Oil" value="${item.name}"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cost (₹)</label>
+            <input class="form-input item-cost" data-idx="${idx}" type="number" min="0" placeholder="e.g. 450" value="${item.cost}"/>
+          </div>
+        </div>
+      </div>`).join('');
+
+    c.querySelectorAll('.rm-item').forEach(btn =>
+      btn.addEventListener('click', () => { modalItems.splice(Number(btn.dataset.idx),1); renderItems(); }));
+    c.querySelectorAll('.item-name').forEach(inp =>
+      inp.addEventListener('input', () => { modalItems[inp.dataset.idx].name = inp.value; }));
+    c.querySelectorAll('.item-cost').forEach(inp =>
+      inp.addEventListener('input', () => { modalItems[inp.dataset.idx].cost = inp.value; }));
+  }
+
+  function openModal() {
+    modalItems = [{name:'',cost:''}];
+    ['f-date','f-odo','f-rate','f-total'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('f-box').value = 'Service';
+    renderItems();
+    document.getElementById('modalOverlay').classList.remove('hidden');
+  }
+  function closeModal() { document.getElementById('modalOverlay').classList.add('hidden'); }
+
+  document.getElementById('addEntryBtn').addEventListener('click', openModal);
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', e => { if(e.target.id==='modalOverlay') closeModal(); });
+  document.getElementById('addItemBtn').addEventListener('click', () => { modalItems.push({name:'',cost:''}); renderItems(); });
+
+  document.getElementById('modalSave').addEventListener('click', () => {
+    document.querySelectorAll('.item-name').forEach(inp => { modalItems[inp.dataset.idx].name = inp.value; });
+    document.querySelectorAll('.item-cost').forEach(inp => { modalItems[inp.dataset.idx].cost = inp.value; });
+
+    const dateRaw = document.getElementById('f-date').value;
+    const odo     = document.getElementById('f-odo').value;
+    const rate    = document.getElementById('f-rate').value;
+    const total   = document.getElementById('f-total').value;
+    const box     = document.getElementById('f-box').value;
+
+    if (!dateRaw||!odo||!rate||!total) { showToast('Fill all required fields.','error'); return; }
+    const validItems = modalItems.filter(i => i.name.trim() && Number(i.cost)>0);
+    if (!validItems.length) { showToast('Add at least one item with a name and cost.','error'); return; }
+
+    const [y,m,d] = dateRaw.split('-');
+    const dateFormatted = `${d}-${m}-${y}`;
+
+    const recs   = getRecords();
+    const cum    = recs.reduce((s,r) => s+r.totalPrice, 0) + Number(total);
+    const newRec = {
+      id:        'r-' + Date.now(),
+      sNo:       recs.length + 1,
+      date:      dateFormatted,
+      odo:       Number(odo),
+      ratePerL:  Number(rate),
+      totalPrice: Number(total),
+      cumPrice:  cum,
+      boxType:   box,
+      items:     validItems.map(i => ({ name: i.name.trim(), cost: Number(i.cost) }))
+    };
+
+    recs.push(newRec);
+    setRecords(recs);
+    closeModal();
+    renderTable(recs);
+    showToast('Record added successfully!');
+  });
+
+  // ── Delete vehicle ────────────────────────────────────────────────────────────
+  document.getElementById('deleteVehicleBtn').addEventListener('click', () => {
+    if (!confirm(`Delete "${vehicle.name}" and ALL its records? This cannot be undone.`)) return;
+    const updated = getCustomVehicles().filter(v => v.id !== VEH_ID);
+    saveCustomVehicles(updated);
+    localStorage.removeItem(STORE_KEY);
+    window.location.href = 'homepage.html';
+  });
+
+  // ── Export ────────────────────────────────────────────────────────────────────
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    if (!allRecords.length) { showToast('No records to export.','error'); return; }
+    VMR_API.exportCSV(allRecords, vehicle.name);
+    showToast('Exported successfully!');
+  });
+
+  // ── Init ──────────────────────────────────────────────────────────────────────
+  renderTable(getRecords());
+</script>
+</body>
+</html>

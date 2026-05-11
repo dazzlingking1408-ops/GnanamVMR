@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VMR — Dashboard</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">VMR</div>
+      <div class="sidebar-logo-text"><h1>VMR</h1><p>Vehicle Maintenance Record</p></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Menu</div>
+      <a href="homepage.html" class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Dashboard
+      </a>
+      <a href="venue.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v9a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Venue
+      </a>
+      <a href="fz.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><path d="M15 6H12L9 17"/><path d="m18 10-5-4-3 4"/></svg>FZ
+      </a>
+      <!-- Dynamic custom vehicle nav items injected here -->
+      <div id="custom-nav-items"></div>
+      <div class="nav-divider"></div>
+      <div class="nav-section-label">Settings</div>
+      <a href="changepassword.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Change Password
+      </a>
+      <div class="nav-divider"></div>
+      <a href="#" class="nav-item" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <p>Keep your vehicle<br/>in perfect condition</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="toggleSidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <h2 class="topbar-title"><span class="accent">Dashboard</span></h2>
+      </div>
+      <div class="topbar-right">
+        <span style="font-size:12px;color:var(--text3)" id="current-date"></span>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- HERO -->
+      <section class="hero fade-in">
+        <div class="hero-watermark">VMR</div>
+        <div class="hero-top">
+          <div class="hero-greeting">
+            <h2>Welcome back, <span id="hero-username">—</span></h2>
+            <p>Track fuel costs, service history, and maintenance records for all your vehicles — all in one place.</p>
+          </div>
+          <div class="hero-badge">
+            <div class="hero-badge-dot"></div>
+            <span>Active Tracking</span>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat-item">
+            <div class="hero-stat-val" id="hs-records">0</div>
+            <div class="hero-stat-lbl">Total Records</div>
+          </div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-val" id="hs-total">₹0</div>
+            <div class="hero-stat-lbl">Total Spent</div>
+          </div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-val" id="hs-venue-odo">0 km</div>
+            <div class="hero-stat-lbl">Venue ODO</div>
+          </div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-val" id="hs-fz-odo">0 km</div>
+            <div class="hero-stat-lbl">FZ ODO</div>
+          </div>
+        </div>
+
+        <!-- Vehicle buttons (static + dynamic) -->
+        <div class="hero-vehicle-btns" id="hero-vehicle-btns">
+          <a href="venue.html" class="veh-btn">
+            <div class="veh-btn-icon">🚗</div>
+            <div class="veh-btn-info">
+              <div class="veh-btn-name">VENUE</div>
+              <div class="veh-btn-sub" id="venue-btn-sub">No records yet</div>
+            </div>
+            <div class="veh-btn-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+            </div>
+          </a>
+          <a href="fz.html" class="veh-btn">
+            <div class="veh-btn-icon">🏍️</div>
+            <div class="veh-btn-info">
+              <div class="veh-btn-name">FZ</div>
+              <div class="veh-btn-sub" id="fz-btn-sub">No records yet</div>
+            </div>
+            <div class="veh-btn-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+            </div>
+          </a>
+          <!-- Add New Vehicle button -->
+          <button class="veh-btn veh-btn-add" id="addVehicleBtn">
+            <div class="veh-btn-icon">＋</div>
+            <div class="veh-btn-info">
+              <div class="veh-btn-name">Add New Vehicle</div>
+              <div class="veh-btn-sub">Create a vehicle page</div>
+            </div>
+            <div class="veh-btn-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- STATS GRID -->
+      <div class="stats-grid slide-up delay-1">
+        <div class="stat-card">
+          <div class="stat-label">Total Fuel Cost</div>
+          <div class="stat-value" id="s-fuel">₹0</div>
+          <div class="stat-sub">All vehicles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Parts & Repairs</div>
+          <div class="stat-value" id="s-parts">₹0</div>
+          <div class="stat-sub">Items & labour</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Venue Records</div>
+          <div class="stat-value" id="s-vrec">0</div>
+          <div class="stat-sub" id="s-vrec-sub">Last: —</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">FZ Records</div>
+          <div class="stat-value" id="s-frec">0</div>
+          <div class="stat-sub" id="s-frec-sub">Last: —</div>
+        </div>
+      </div>
+
+      <!-- RECENT TABLES -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px" class="slide-up delay-2" id="recentGrid">
+        <div>
+          <div class="section-title">Recent — Venue</div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Date</th><th>Type</th><th>Items</th><th>Total</th></tr></thead>
+              <tbody id="venue-recent-body">
+                <tr><td colspan="5"><div class="empty-state"><p>No entries yet</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="section-title">Recent — FZ</div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Date</th><th>Type</th><th>Items</th><th>Total</th></tr></thead>
+              <tbody id="fz-recent-body">
+                <tr><td colspan="5"><div class="empty-state"><p>No entries yet</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading overlay -->
+      <div id="loadingOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:999;">
+        <div style="text-align:center;">
+          <div style="width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;"></div>
+          <p style="color:var(--text2);font-size:13px;">Loading dashboard…</p>
+        </div>
+      </div>
+
+    </main>
+    <footer class="page-footer">© 2024 VMR - Vehicle Maintenance Record. All rights reserved.</footer>
+  </div>
+</div>
+
+<!-- ADD VEHICLE MODAL -->
+<div class="modal-overlay hidden" id="addVehicleModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h2>Add New Vehicle</h2>
+      <button class="modal-close" id="avModalClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Vehicle Nickname *</label>
+          <input class="form-input" id="av-name" type="text" placeholder="e.g. My Swift, Dad's Bike"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Make & Model *</label>
+          <input class="form-input" id="av-model" type="text" placeholder="e.g. Maruti Swift"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Year</label>
+          <input class="form-input" id="av-year" type="number" min="1980" max="2099" placeholder="e.g. 2022"/>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Vehicle Type *</label>
+          <select class="form-input" id="av-type">
+            <option value="car">🚗 Car</option>
+            <option value="bike">🏍️ Bike / Motorcycle</option>
+            <option value="scooter">🛵 Scooter</option>
+            <option value="truck">🚛 Truck / Van</option>
+            <option value="other">🚙 Other</option>
+          </select>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--text3);margin-top:12px;">
+        A dedicated page will be created for this vehicle and added to the sidebar.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="avModalCancel">Cancel</button>
+      <button class="btn btn-primary" id="avModalSave">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+        Create Vehicle
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Add vehicle button style */
+.veh-btn-add {
+  border: 2px dashed var(--border2);
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  width: 100%;
+  transition: border-color .2s, background .2s;
+}
+.veh-btn-add:hover {
+  border-color: var(--red);
+  background: rgba(var(--red-rgb, 180,30,30), 0.06);
+}
+.veh-btn-add .veh-btn-icon {
+  font-size: 22px;
+  opacity: 0.7;
+}
+</style>
+
+<script src="api.js"></script>
+<script>
+  VMR_API.requireAuth();
+
+  document.getElementById('toggleSidebar').addEventListener('click', () =>
+    document.getElementById('sidebar').classList.toggle('collapsed'));
+
+  document.getElementById('logoutBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    VMR_API.logout();
+  });
+
+  document.getElementById('current-date').textContent =
+    new Date().toLocaleDateString('en-IN', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
+
+  const user = VMR_API.getUser();
+  document.getElementById('hero-username').textContent = user ? user.username : 'there';
+
+  function fmt(n)      { return Number(n).toLocaleString('en-IN', {minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function fmtN(n)     { return Number(n).toLocaleString('en-IN'); }
+  function totalAmt(r) { return r.items.reduce((s,i) => s + i.cost, 0) + r.totalPrice; }
+  function badgeCls(t) { return ({Service:'service',Maintenance:'maintenance',Repair:'repair',Inspection:'inspection'})[t]||'service'; }
+
+  let toastTimer;
+  function showToast(msg, type='error') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast toast-' + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.add('hidden'), 3500);
+  }
+
+  // ── Custom vehicles (stored in localStorage) ────────────────────────────────
+  const EMOJI_MAP = { car:'🚗', bike:'🏍️', scooter:'🛵', truck:'🚛', other:'🚙' };
+
+  function getCustomVehicles() {
+    try { return JSON.parse(localStorage.getItem('vmr_custom_vehicles') || '[]'); } catch { return []; }
+  }
+  function saveCustomVehicles(list) {
+    localStorage.setItem('vmr_custom_vehicles', JSON.stringify(list));
+  }
+
+  function slugify(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+
+  function renderCustomVehicles() {
+    const vehicles = getCustomVehicles();
+
+    // Sidebar nav items
+    const navContainer = document.getElementById('custom-nav-items');
+    navContainer.innerHTML = vehicles.map(v => `
+      <a href="vehicle.html?id=${v.id}" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/>
+          <path d="M15 6H12L9 17"/><path d="m18 10-5-4-3 4"/>
+        </svg>${v.name}
+      </a>`).join('');
+
+    // Hero vehicle buttons
+    const btnsContainer = document.getElementById('hero-vehicle-btns');
+    // Remove old custom cards (keep first 2 static + add button)
+    btnsContainer.querySelectorAll('.veh-btn-custom').forEach(el => el.remove());
+    // Insert before the add button
+    const addBtn = document.getElementById('addVehicleBtn');
+    vehicles.forEach(v => {
+      const a = document.createElement('a');
+      a.href = `vehicle.html?id=${v.id}`;
+      a.className = 'veh-btn veh-btn-custom';
+      a.innerHTML = `
+        <div class="veh-btn-icon">${EMOJI_MAP[v.type] || '🚙'}</div>
+        <div class="veh-btn-info">
+          <div class="veh-btn-name">${v.name.toUpperCase()}</div>
+          <div class="veh-btn-sub">${v.model}${v.year ? ' · ' + v.year : ''}</div>
+        </div>
+        <div class="veh-btn-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+        </div>`;
+      btnsContainer.insertBefore(a, addBtn);
+    });
+  }
+
+  // ── Add Vehicle Modal ────────────────────────────────────────────────────────
+  function openAddVehicle() { document.getElementById('addVehicleModal').classList.remove('hidden'); }
+  function closeAddVehicle() {
+    document.getElementById('addVehicleModal').classList.add('hidden');
+    ['av-name','av-model','av-year'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('av-type').value = 'car';
+  }
+
+  document.getElementById('addVehicleBtn').addEventListener('click', openAddVehicle);
+  document.getElementById('avModalClose').addEventListener('click', closeAddVehicle);
+  document.getElementById('avModalCancel').addEventListener('click', closeAddVehicle);
+  document.getElementById('addVehicleModal').addEventListener('click', e => {
+    if (e.target.id === 'addVehicleModal') closeAddVehicle();
+  });
+
+  document.getElementById('avModalSave').addEventListener('click', () => {
+    const name  = document.getElementById('av-name').value.trim();
+    const model = document.getElementById('av-model').value.trim();
+    const year  = document.getElementById('av-year').value.trim();
+    const type  = document.getElementById('av-type').value;
+
+    if (!name || !model) { showToast('Please fill in Nickname and Make & Model.', 'error'); return; }
+
+    const vehicles = getCustomVehicles();
+    const id = slugify(name) + '-' + Date.now();
+
+    vehicles.push({ id, name, model, year, type });
+    saveCustomVehicles(vehicles);
+
+    closeAddVehicle();
+    renderCustomVehicles();
+    showToast(`"${name}" added! Click it to open its page.`, 'success');
+  });
+
+  // ── Dashboard data ───────────────────────────────────────────────────────────
+  function buildRecent(recs, tbodyId, label) {
+    const tbody = document.getElementById(tbodyId);
+    if (!recs.length) {
+      tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No ${label} entries yet</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = [...recs].reverse().slice(0,5).map(r => `
+      <tr>
+        <td class="muted">${r.sNo}</td>
+        <td>${r.date}</td>
+        <td><span class="badge badge-${badgeCls(r.boxType)}">${r.boxType}</span></td>
+        <td class="truncate" title="${r.items.map(x=>x.name).join(', ')}">${r.items.map(x=>x.name).join(', ')}</td>
+        <td class="amount">₹${fmt(totalAmt(r))}</td>
+      </tr>`).join('');
+  }
+
+  async function loadDashboard() {
+    try {
+      const data     = await VMR_API.getAllRecords();
+      const { summary, records } = data;
+      const vRecs    = records.venue || [];
+      const fRecs    = records.fz   || [];
+
+      document.getElementById('hs-records').textContent   = summary.totalRecords;
+      document.getElementById('hs-total').textContent     = '₹' + fmtN(Math.round(summary.grandTotal));
+      document.getElementById('hs-venue-odo').textContent = summary.venueLastOdo ? fmtN(summary.venueLastOdo) + ' km' : '0 km';
+      document.getElementById('hs-fz-odo').textContent    = summary.fzLastOdo   ? fmtN(summary.fzLastOdo)   + ' km' : '0 km';
+
+      document.getElementById('venue-btn-sub').textContent = summary.venueCount
+        ? `${summary.venueCount} records · ₹${fmtN(Math.round(vRecs.reduce((s,r)=>s+r.totalPrice,0)))}` : 'No records yet';
+      document.getElementById('fz-btn-sub').textContent = summary.fzCount
+        ? `${summary.fzCount} records · ₹${fmtN(Math.round(fRecs.reduce((s,r)=>s+r.totalPrice,0)))}` : 'No records yet';
+
+      document.getElementById('s-fuel').textContent  = '₹' + fmtN(Math.round(summary.fuelTotal));
+      document.getElementById('s-parts').textContent = '₹' + fmtN(Math.round(summary.partsTotal));
+      document.getElementById('s-vrec').textContent  = summary.venueCount;
+      document.getElementById('s-frec').textContent  = summary.fzCount;
+      document.getElementById('s-vrec-sub').textContent = 'Last: ' + (summary.venueLastDate || '—');
+      document.getElementById('s-frec-sub').textContent = 'Last: ' + (summary.fzLastDate   || '—');
+
+      buildRecent(vRecs, 'venue-recent-body', 'Venue');
+      buildRecent(fRecs, 'fz-recent-body',    'FZ');
+
+    } catch (err) {
+      showToast('Failed to load dashboard: ' + err.message, 'error');
+    } finally {
+      document.getElementById('loadingOverlay').style.display = 'none';
+    }
+  }
+
+  if (window.innerWidth < 700) document.getElementById('recentGrid').style.gridTemplateColumns = '1fr';
+
+  renderCustomVehicles();
+  loadDashboard();
+</script>
+</body>
+</html>
