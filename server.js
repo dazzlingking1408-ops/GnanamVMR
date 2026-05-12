@@ -60,7 +60,7 @@ app.get('/api/health', (req, res) => {
 /* ── SPA fallback (non-API routes serve index) ─ */
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api')) return next();
-  res.sendFile(path.join(__dirname, 'Public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'Public', 'homepage.html'));
 });
 
 /* ── 404 ─────────────────────────────────────── */
