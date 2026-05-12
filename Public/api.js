@@ -5,8 +5,7 @@
 
 const VMR_API = (() => {
 
-const BASE = 'https://gnanamvmr.onrender.com/api';
-
+  const BASE = 'https://gnanamvmr-production.up.railway.app/api';
   /* ── Token helpers ── */
   const getToken  = ()        => localStorage.getItem('vmr_token');
   const setToken  = (t)       => localStorage.setItem('vmr_token', t);
