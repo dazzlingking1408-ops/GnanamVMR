@@ -4,6 +4,7 @@ require('dotenv').config();
 const express   = require('express');
 const cors      = require('cors');
 const rateLimit = require('express-rate-limit');
+const path      = require('path');
 
 // Initialize DB + auto-create admin on startup
 require('./config/db');
@@ -26,6 +27,9 @@ app.use(cors({
 /* ── Body parser ────────────────────────────── */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+/* ── Serve frontend static files ────────────── */
+app.use(express.static(path.join(__dirname, 'Public')));
 
 /* ── Rate limiter ───────────────────────────── */
 app.use('/api/', rateLimit({
@@ -51,6 +55,12 @@ app.get('/api/health', (req, res) => {
     version:   '2.0.0',
     timestamp: new Date().toISOString()
   });
+});
+
+/* ── SPA fallback (non-API routes serve index) ─ */
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  res.sendFile(path.join(__dirname, 'Public', 'index.html'));
 });
 
 /* ── 404 ─────────────────────────────────────── */
